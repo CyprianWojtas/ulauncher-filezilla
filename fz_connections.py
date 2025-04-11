@@ -1,39 +1,39 @@
 import os
 from pathlib import Path
-
 from xml.dom import minidom
 
 def get_filezilla_sites():
 	path = os.path.join(Path.home(), '.config/filezilla/sitemanager.xml')
-	dom = minidom.parse(path)
-	elements = dom.getElementsByTagName('Server')
-	
-	servers = []
-	
-	for server in elements:
-		name = server.getElementsByTagName('Name')[0].firstChild.nodeValue
-		host = server.getElementsByTagName('Host')[0].firstChild.nodeValue
-		user = server.getElementsByTagName('User')[0].firstChild.nodeValue
+	try:
+		dom = minidom.parse(path)
+		elements = dom.getElementsByTagName('Server')
 
-		parent_node = server.parentNode
-		folder = []
+		servers = []
 
-		while parent_node.nodeName == 'Folder':
-			folder.insert(0, parent_node.firstChild.nodeValue)
-			parent_node = parent_node.parentNode
+		for server in elements:
+			name = server.getElementsByTagName('Name')[0].firstChild.nodeValue
+			host = server.getElementsByTagName('Host')[0].firstChild.nodeValue
+			user = server.getElementsByTagName('User')[0].firstChild.nodeValue
 
-		folder = '/'.join(folder) + '/' if folder else ''
+			parent_node = server.parentNode
+			folder = []
 
-		servers.append({
-			'name': name,
-			'host': host,
-			'user': user,
-			'path': '0/' + folder + name
-		})
-	
-	return servers
+			while parent_node.nodeName == 'Folder':
+				folder.insert(0, parent_node.firstChild.nodeValue)
+				parent_node = parent_node.parentNode
 
+			folder = '/'.join(folder) + '/' if folder else ''
 
+			servers.append({
+				'name': name,
+				'host': host,
+				'user': user,
+				'path': '0/' + folder + name
+			})
+		
+		return servers
+	except FileNotFoundError:
+		return None
 
 
 def sort_connections(connection, text):
