@@ -1,0 +1,21 @@
+{
+	"required_api_version": "^2.0.0",
+	"name": "FileZilla",
+	"description": "FileZilla extension",
+	"developer_name": "Cyprian Wojtas",
+	"icon": "images/icon.png",
+	"options":
+	{
+		"query_debounce": 0.05
+	},
+	"preferences":
+	[
+		{
+			"id": "demo_kw",
+			"type": "keyword",
+			"name": "Search connection",
+			"description": "Search for connection in FileZilla site manager",
+			"default_value": "fz"
+		}
+	]
+}
